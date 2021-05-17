@@ -71,7 +71,7 @@ if (isset($_POST['add'])) {
 				<input type="text" placeholder="playlist name" name="playlist name" value="<?php echo $playlist_name; ?>" required>
 			</div>
 			<div class="input-group">
-                <button name ="add" class="btn btn-success"><a href="welcome.php">add</a>
+                <button name ="add" class="btn btn-success"><a href="addplaylist.php">add</a>
             <div class = "d-flex flex-row-reverse">
                 <button name ="back" class="btn btn-warning"><a href="welcome.php">back to menu</a>
 		</form>
