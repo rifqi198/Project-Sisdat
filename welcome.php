@@ -1,10 +1,17 @@
 <?php 
 
+include 'config.php';
+
+error_reporting(0);
+
 session_start();
 
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
 }
+
+
+
 
 ?>
 
@@ -37,36 +44,57 @@ if (!isset($_SESSION['username'])) {
             <table class="table table-striped table-dark">
                 <thead class="thead-dark">
                     <tr>
+                        <th>No </th>
                         <th>Playlist Name</th>
-                            <th>Edit</th>
+                            <th> </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td> nama album </td>
-                            <td><div class="d-flex flex-row-reverse">
-                                <div class="p-2">
-                                    <button type="button" class="btn btn-danger"><a href="deleteplaylist.php">del</a></button>  
-                                </div>
-                                <div class="p-2">
-                                    <button type="button" class="btn btn-success"><a href="music.php">add</a></button>  
-                                </div>
-                            <td>    
-                                <div class="p-2">
-                                    <button type="button" class="btn btn-warning"><a href="music.php">read</a></button>  
-                                </div>
+                            <td>
+                            <?php             
+                               //query ke database SELECT tabel mahasiswa urut berdasarkan id yang paling besar
+                                $sql = mysqli_query($conn, "SELECT playlist_name FROM playlist") or die(mysqli_error($conn));
+                                //jika query diatas menghasilkan nilai > 0 maka menjalankan script di bawah if...
+                                if(mysqli_num_rows($sql) > 0){
+                                    //membuat variabel $no untuk menyimpan nomor urut
+                                    $no = 1;
+                                    //melakukan perulangan while dengan dari dari query $sql
+                                    while($data = mysqli_fetch_assoc($sql)){
+                                        //menampilkan data perulangan
+                                        echo '
+                                        <tr>
+							<td>'.$no.'</td>
+							<td>'.$data['playlist_name'].'</td>
+							<td>
+                                <a href = "updateplaylist.php?page=editplaylist='.$data['playlist_id'].'"class="btn btn-basic"><a href="updateplaylist.php"><i class="fas fa-pen-fancy"></i></a>
+                                <a href = "songlist.php?page=editplaylist='.$data['playlist_id'].'<a href="songlist.php"><i class="fas fa-eye"></i></a>
+                                <a href = "music.php?page=editplaylist='.$data['playlist_id'].'<a href="music.php"><i class="fas fa-plus"></i></a>
+                                <a href = "delplaylist.php?page=editplaylist='.$data['playlist_id'].'<a href="delplaylist.php"><i class="fas fa-trash-alt"></i>
+							</td>
+						</tr>
+						';
+						$no++;
+					}
+				}else{
+					echo '
+					<tr>
+						<td colspan="6">Tidak ada data.</td>
+					</tr>
+					';
+				} 
+                            ?>
                             </td>
                         <tr>
                     </tbody>
                     </div>
+    </div>                                    
 
-        
-
-        <div class="bottom-center">
+        <div class="d-flex justify-content-align">
         <button type="button" class="btn btn-success"><a href="addplaylist.php">add playlist</a></button> </div>
         
         <div class = "fixed-bottom">
-            <a href="logout.php">Logout</a>
+            <a href="logout.php">Logout</a> </div>
 
 </main>
 </body>

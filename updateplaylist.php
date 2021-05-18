@@ -9,7 +9,7 @@ session_start();
 if (!isset($_SESSION['username'])) {
     header("Location: welcome.php");
 }
-if (isset($_POST['add'])) {
+if (isset($_POST['save'])) {
 	$playlist_id = $_POST['playlist id'];
 	$username = $_POST['username'];
 	$playlist_name = $_POST['playlist name'];
@@ -17,13 +17,12 @@ if (isset($_POST['add'])) {
 	if ($username == $_SESSION['username']) {
 		$sql = "SELECT * FROM playlist WHERE username='$username'";
 		$result = mysqli_query($conn, $sql);
-		if ($result->num_rows > 0) {
-			$sql = "INSERT INTO playlist 
-					VALUES ('$playlist_id', '$username', '$playlist_name')";
+		if (!$result->num_rows > 0) {
+			$sql = "UPDATE playlist set username = $username, playlist_name = $playlist_name WHERE playlist_id = $playlist_id";
 			$result = mysqli_query($conn, $sql);
 			if ($result) {
-				echo "<script>alert('you added a playlist.')</script>";
-				$playlist_id = "";
+				echo "<script>alert('you updated a playlist.')</script>";
+				$playlist_id = "";                                                                                                                                                                                                                                                                                                                                                                                                                   
 				$username = "";
 				$playlist_name = "";
 			} else {
@@ -46,7 +45,7 @@ if (isset($_POST['add'])) {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Add Playlist</title>
+    <title>Edit Playlist</title>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -60,7 +59,7 @@ if (isset($_POST['add'])) {
         <h1 class="py-4 bg-dark text-light rounded"><i class="fas fa-music"></i> RHYTM</h1> 
 
         <div class = "d-flex justify-content-center">
-        <?php echo "<h1>Add Playlist </h1>"; ?> 
+        <?php echo "<h1>Edit Playlist </h1>"; ?> 
             </div>
 
         <div class = "d-flex justify-content-center">
@@ -75,7 +74,7 @@ if (isset($_POST['add'])) {
 				<input type="text" placeholder="playlist name" name="playlist name" value="<?php echo $playlist_name; ?>" required>
 			</div>
 			<div class="input-group">
-                <button name ="add" class="btn btn-success">add</button>
+                <button name ="save" class="btn btn-success">save</button>
             <div class = "d-flex flex-row-reverse">
                 <button type ="back" class="btn btn-warning"><a href="welcome.php">back to menu</a></button>
 		</form>
